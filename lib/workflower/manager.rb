@@ -61,7 +61,9 @@ module Workflower
           @calling_model.assign_attributes flow.updateable_attributes(@calling_model)
           flow.call_after_transition(@calling_model)
           true
-        rescue Exception
+        rescue Exception => e
+          puts "ERROR MESSAGE: #{e.message}"
+          puts "ERROR CLASS: #{e}"
           @calling_model.errors.add(@calling_model.workflower_state_column_name, :transition_faild)
           false
         end
