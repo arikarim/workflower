@@ -63,7 +63,7 @@ module Workflower
           true
         rescue Exception => e
           puts "ERROR MESSAGE: #{e.message}"
-          puts "ERROR CLASS: #{e}"
+          puts "ERROR: #{e}"
           @calling_model.errors.add(@calling_model.workflower_state_column_name, :transition_faild)
           false
         end
