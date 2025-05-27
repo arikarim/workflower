@@ -63,9 +63,8 @@ module Workflower
         rescue Exception => e
           # if the log level is set to debug, we want to log the error
           logger = Workflower.configuration.logger
-          if logger.present? && logger.level == Logger::DEBUG
-            logger.debug("Error during transition: #{e.message}")
-          end
+          logger.debug("Error during transition: #{e.message}") if logger.present?
+
           @calling_model.errors.add(@calling_model.workflower_state_column_name, :transition_faild)
           false
         end
