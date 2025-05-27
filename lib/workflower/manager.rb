@@ -37,7 +37,6 @@ module Workflower
     end
 
     def possible_transitions
-      # @transitions.where(state: @current_state).where("sequence = :seq OR sequence = :seq_plus", seq: @current_sequence, seq_plus: @current_sequence + 1).order("sequence ASC") || []
       @transitions.select do |item|
         item[:state] == @current_state && (item[:sequence] == @current_sequence || item[:sequence] == @current_sequence + 1)
       end
@@ -62,8 +61,11 @@ module Workflower
           flow.call_after_transition(@calling_model)
           true
         rescue Exception => e
-          puts "ERROR MESSAGE: #{e.message}"
-          puts "ERROR: #{e}"
+          # if the log level is set to debug, we want to log the error
+          logger = Workflower.configuration.logger
+          if logger.present? && logger.level == Logger::DEBUG
+            logger.debug("Error during transition: #{e.message}")
+          end
           @calling_model.errors.add(@calling_model.workflower_state_column_name, :transition_faild)
           false
         end
